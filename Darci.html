@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="./cydran.js"></script>
+
+	<template id='Filter'>
+		<div>
+			<input type="textbox" c:model="m().filter" c:onkeyup="m().onChange()">
+
+			<div c:each="m().filtered" c:each:mode="generated">
+				<template c:type="item">
+					<div>
+						<input type="checkbox" value="{{v().name}}">{{v().name}}
+					</div>
+				</template>
+			</div>
+		</div>
+	</template>
+
+	<script>
+		window.onload = function () {
+			class FilterClass extends cydran.Component {
+				constructor() {
+					const TEMPLATE = document.querySelector("#Filter").innerHTML.trim();
+					super(TEMPLATE);
+					this.filter = 'Ronna!';
+					this.list = [
+						{ name: "A" },
+						{ name: "B" },
+						{ name: "C" },
+						{ name: "D" },					
+					];
+					this.filtered = this.list;
+				}
+
+				onChange() {
+					let _this = this;
+					this.filtered = this.filtered.filter(e => {
+						//let result = RegExp(/apple/).test(e.name);
+						let result = (e.name == 'apple');
+						console.log(result);
+						return e.name == 'apple'; // result;
+					})
+				}
+			}
+			cydran.builder("body")
+				.withDebugLogging()
+				.withInitializer(function () {
+					const app = new FilterClass();
+					this.setComponent(app);
+				})
+				.build()
+				.start();
+		}
+
+	</script>
+</head>
+
+<body></body>
+
+
+</html>
